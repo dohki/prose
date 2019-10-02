@@ -5,27 +5,20 @@ namespace ProseTutorial
 {
     public static class Semantics
     {
-        public static string Substring(string v, int start, int end)
+        public static bool FitInRange(uint var, Tuple<uint, uint> range)
         {
-            return v.Substring(start, end - start);
+            var lowerBound = range.Item1;
+            var upperBound = range.Item2;
+
+            return lowerBound <= var && var <= upperBound;
         }
 
-        public static int? AbsPos(string v, int k)
+        public static Tuple<uint, uint> Range(uint lowerBound, uint upperBound)
         {
-            return k > 0 ? k - 1 : v.Length + k + 1;
-        }
+            if (lowerBound > upperBound)
+                return null;
 
-        public static int? RelPos(string v, Tuple<Regex, Regex> rr)
-        {
-            Regex left = rr.Item1;
-            Regex right = rr.Item2;
-            MatchCollection rightMatches = right.Matches(v);
-            MatchCollection leftMatches = left.Matches(v);
-            foreach (Match leftMatch in leftMatches)
-            foreach (Match rightMatch in rightMatches)
-                if (rightMatch.Index == leftMatch.Index + leftMatch.Length)
-                    return leftMatch.Index + leftMatch.Length;
-            return null;
+            return Tuple.Create(lowerBound, upperBound);
         }
     }
 }

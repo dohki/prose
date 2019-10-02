@@ -11,34 +11,24 @@ namespace ProseTutorial
         {
         }
 
-        [FeatureCalculator(nameof(Semantics.Substring))]
-        public static double Substring(double v, double start, double end)
+        [FeatureCalculator(nameof(Semantics.FitInRange))]
+        public static double FitInRange(double var, double range)
         {
-            return start * end;
+            // TODO: Use var with GetFeatureValueForVariable
+            return range;
         }
 
-        [FeatureCalculator(nameof(Semantics.AbsPos))]
-        public static double AbsPos(double v, double k)
+        [FeatureCalculator(nameof(Semantics.Range))]
+        public static double Range(double lowerBound, double upperBound)
         {
-            return k;
+            return 1 / (upperBound - lowerBound);
         }
 
-        [FeatureCalculator("k", Method = CalculationMethod.FromLiteral)]
-        public static double K(int k)
+        [FeatureCalculator("bound", Method = CalculationMethod.FromLiteral)]
+        public static double Bound(uint bound)
         {
-            return 1.0 / Math.Abs(k);
-        }
-
-        [FeatureCalculator(nameof(Semantics.RelPos))]
-        public static double RelPos(double x, double rr)
-        {
-            return rr;
-        }
-
-        [FeatureCalculator("rr", Method = CalculationMethod.FromLiteral)]
-        public static double RR(Tuple<Regex, Regex> tuple)
-        {
-            return 1;
+            //return 1.0 / Math.Abs(bound);
+            return (double) bound;
         }
     }
 }

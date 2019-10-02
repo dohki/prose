@@ -17,7 +17,7 @@ namespace ProseTutorial
     {
         private static readonly Grammar Grammar = DSLCompiler.Compile(new CompilerOptions
         {
-            InputGrammarText = File.ReadAllText("synthesis/grammar/substring.grammar"),
+            InputGrammarText = File.ReadAllText("synthesis/grammar/range.grammar"),
             References = CompilerReference.FromAssemblyFiles(typeof(Program).GetTypeInfo().Assembly)
         }).Value;
 
@@ -77,28 +77,19 @@ namespace ProseTutorial
 
         private static void LearnFromNewExample()
         {
-            Console.Out.Write("Provide a new input-output example (e.g., \"(Sumit Gulwani)\",\"Gulwani\"): ");
+            Console.Out.Write("Provide a new input-output example (e.g., \"10 True\",\"20 False\"): ");
             try
             {
-                string input = Console.ReadLine();
-                if (input != null)
-                {
-                    int startFirstExample = input.IndexOf("\"", StringComparison.Ordinal) + 1;
-                    int endFirstExample = input.IndexOf("\"", startFirstExample + 1, StringComparison.Ordinal) + 1;
-                    int startSecondExample = input.IndexOf("\"", endFirstExample + 1, StringComparison.Ordinal) + 1;
-                    int endSecondExample = input.IndexOf("\"", startSecondExample + 1, StringComparison.Ordinal) + 1;
+                string line = Console.ReadLine();
+                if (line == null)
+                    throw new Exception("No Input");
 
-                    if (startFirstExample >= endFirstExample || startSecondExample >= endSecondExample)
-                        throw new Exception(
-                            "Invalid example format. Please try again. input and out should be between quotes");
+                string[] splittedLine = line.Split(' ');
+                var inputExample = UInt32.Parse(splittedLine[0]);
+                var outputExample = Boolean.Parse(splittedLine[1]);
 
-                    string inputExample = input.Substring(startFirstExample, endFirstExample - startFirstExample - 1);
-                    string outputExample =
-                        input.Substring(startSecondExample, endSecondExample - startSecondExample - 1);
-
-                    State inputState = State.CreateForExecution(Grammar.InputSymbol, inputExample);
-                    Examples.Add(inputState, outputExample);
-                }
+                State inputState = State.CreateForExecution(Grammar.InputSymbol, inputExample);
+                Examples.Add(inputState, outputExample);
             }
             catch (Exception)
             {
@@ -111,7 +102,7 @@ namespace ProseTutorial
                 Console.WriteLine("\"{0}\" -> \"{1}\"", example.Key.Bindings.First().Value, example.Value);
 
             var scoreFeature = new RankingScore(Grammar);
-            ProgramSet topPrograms = _prose.LearnGrammarTopK(spec, scoreFeature, 4, null);
+            ProgramSet topPrograms = _prose.LearnGrammarTopK(spec, scoreFeature, 1, null);
             if (topPrograms.IsEmpty)
                 throw new Exception("No program was found for this specification.");
 

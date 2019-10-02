@@ -1,15 +1,14 @@
 ﻿using semantics ProseTutorial.Semantics;
 using learners ProseTutorial.WitnessFunctions;
 
-language Substring;
+language Approximation;
 
 @complete feature double Score = ProseTutorial.RankingScore;
 
-@input string v;
+@input uint var;
 
-@start string program := Substring(v, pos, pos);
+@start bool sat := FitInRange(var, range);
 
-int pos := AbsPos(v, k) | RelPos(v, rr);
+Tuple<uint, uint> range := Range(bound, bound);
 
-int k; 
-Tuple<Regex,Regex> rr; 
+uint bound;
