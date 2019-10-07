@@ -12,15 +12,9 @@ namespace ProseTutorial
         }
 
         [FeatureCalculator(nameof(Semantics.FitInRange))]
-        public static double FitInRange(double var, double range)
+        public static double FitInRange(double var, double lowerBound, double upperBound)
         {
             // TODO: Use var with GetFeatureValueForVariable
-            return range;
-        }
-
-        [FeatureCalculator(nameof(Semantics.Range))]
-        public static double Range(double lowerBound, double upperBound)
-        {
             return 1 / (upperBound - lowerBound);
         }
 

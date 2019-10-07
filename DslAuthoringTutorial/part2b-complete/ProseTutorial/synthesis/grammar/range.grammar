@@ -3,12 +3,10 @@ using learners ProseTutorial.WitnessFunctions;
 
 language Approximation;
 
-@complete feature double Score = ProseTutorial.RankingScore;
+feature double Score = ProseTutorial.RankingScore;
 
 @input uint var;
 
-@start bool sat := FitInRange(var, range);
-
-Tuple<uint, uint> range := Range(bound, bound);
+@start bool sat := FitInRange(var, bound, bound);
 
 uint bound;

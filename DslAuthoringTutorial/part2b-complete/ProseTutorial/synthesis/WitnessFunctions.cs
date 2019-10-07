@@ -13,7 +13,7 @@ namespace ProseTutorial
         {
         }
 
-        [WitnessFunction(nameof(Semantics.Range), 0)]
+        [WitnessFunction(nameof(Semantics.FitInRange), 1)]
         public ExampleSpec WitnessLowerBound(GrammarRule rule, ExampleSpec spec)
         {
             var result = new Dictionary<State, object>();
@@ -38,7 +38,7 @@ namespace ProseTutorial
             return new ExampleSpec(result);
         }
 
-        [WitnessFunction(nameof(Semantics.Range), 1)]
+        [WitnessFunction(nameof(Semantics.FitInRange), 2)]
         public ExampleSpec WitnessUpperBound(GrammarRule rule, ExampleSpec spec)
         {
             var result = new Dictionary<State, object>();

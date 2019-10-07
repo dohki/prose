@@ -89,11 +89,20 @@ namespace ProseTutorial
                 var outputExample = Boolean.Parse(splittedLine[1]);
 
                 State inputState = State.CreateForExecution(Grammar.InputSymbol, inputExample);
-                Examples.Add(inputState, outputExample);
+                // TODO: Check example existence
+                if (Examples.ContainsKey(inputState))
+                {
+                    if ((bool)Examples[inputState] != outputExample)
+                        throw new Exception("Inconsistent Example");
+                }
+                else
+                    Examples.Add(inputState, outputExample);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new Exception("Invalid example format. Please try again. input and out should be between quotes");
+                Console.WriteLine(e.ToString());
+                throw e;
+                //throw new Exception("Invalid example format. Please try again. input and out should be between quotes");
             }
 
             var spec = new ExampleSpec(Examples);
@@ -127,20 +136,19 @@ namespace ProseTutorial
 
             try
             {
-                Console.Out.Write("Insert a new input: ");
-                string newInput = Console.ReadLine();
-                if (newInput != null)
+                Console.Out.Write("Insert a new input (eg. 77): ");
+                var rawInput = Console.ReadLine();
+                if (rawInput != null)
                 {
-                    int startFirstExample = newInput.IndexOf("\"", StringComparison.Ordinal) + 1;
-                    int endFirstExample = newInput.IndexOf("\"", startFirstExample + 1, StringComparison.Ordinal) + 1;
-                    newInput = newInput.Substring(startFirstExample, endFirstExample - startFirstExample - 1);
+                    var newInput = UInt32.Parse(rawInput);
                     State newInputState = State.CreateForExecution(Grammar.InputSymbol, newInput);
                     Console.Out.WriteLine("RESULT: \"{0}\" -> \"{1}\"", newInput, _topProgram.Invoke(newInputState));
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new Exception("The execution of the program on this input thrown an exception");
+                Console.WriteLine(e.ToString());
+                throw e;
             }
         }
 
